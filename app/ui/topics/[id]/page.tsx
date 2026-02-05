@@ -3,9 +3,16 @@ import { Question } from "@/components/Question";
 import { fetchQuestions, fetchTopic } from "@/lib/data";
 import { HashtagIcon } from "@heroicons/react/24/outline";
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const topic = await fetchTopic(params.id);
-  const questions = await fetchQuestions(params.id);
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function Page({ params }: PageProps) {
+  // Unwrap the Promise
+  const { id } = await params;
+
+  const topic = await fetchTopic(id);
+  const questions = await fetchQuestions(id);
 
   if (!topic) {
     return <div>Topic not found</div>;
